@@ -12,6 +12,12 @@ A simple yet powerful personal finance management application to track income, e
 - 📱 Mobile responsive design
 - 📈 Monthly spending reports
 
+## Requirements
+
+- PHP 7.4+
+- MySQL 5.7+ (or MariaDB equivalent)
+- Local web server (XAMPP/WAMP/MAMP)
+
 ## Quick Installation
 
 ### 1. Database Setup
@@ -25,16 +31,16 @@ define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
 define('DB_PASS', '');
 define('DB_NAME', 'budget_tracker');
+```
 
+### 3. Run Application
+Place folder in your web server root (e.g. XAMPP `htdocs`)
 
-3. Run Application
-Place folder in web server (XAMPP/WAMP/MAMP)
+Access: `http://localhost/budgettracker/`
 
-Access: http://localhost/budgettracker/
+## Folder Structure
 
-Folder Structure
-
-
+```
 budgettracker/
 ├── config/database.php
 ├── css/style.css
@@ -52,19 +58,18 @@ budgettracker/
 ├── logout.php
 ├── register.php
 └── reports.php
+```
 
-Usage
-Register - Create new account
+## Usage
 
-Add Transactions - Log income and expenses
+- Register: Create a new account
+- Add Transactions: Log income and expenses
+- Dashboard: View balance and recent activity
+- Set Goals: Create monthly budget limits
+- Reports: Analyze spending by date
 
-Dashboard - View balance and recent activity
+## Tech Stack
 
-Set Goals - Create monthly budget limits
-
-Reports - Analyze spending by date
-
-Tech Stack
 PHP 7.4+
 
 MySQL
@@ -73,13 +78,12 @@ HTML5/CSS3
 
 JavaScript
 
-Troubleshooting
-"Connection failed" - Check MySQL is running and database credentials
+## Troubleshooting
 
-"Headers already sent" - Remove spaces before <?php tags
+- "Connection failed": Check MySQL is running and database credentials
+- "Headers already sent": Remove spaces before `<?php` tags
+- Login not working: Verify the user exists in the database
 
-Login not working - Verify user exists in database
+## License
 
-License
 MIT License - Free for personal and commercial use
-
