@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require_once 'config/database.php';
 require_once 'includes/auth.php';
 
@@ -7,8 +9,16 @@ $user_id = $_SESSION['user_id'];
 $error = '';
 $success = '';
 
-// Get current month
+// Get current month as YYYY-MM
 $current_month = date('Y-m');
+$current_month_date = $current_month . '-01'; // For database queries
+
+// Get expense categories
+$categories_query = "SELECT * FROM categories WHERE user_id = ? AND type = 'expense' ORDER BY name";
+$stmt = $conn->prepare($categories_query);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$categories = $stmt->get_result();
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -26,6 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $category_id = intval($_POST['category_id']);
         $amount = floatval($_POST['amount']);
         $month = $_POST['month'] ?? $current_month;
+        $month_date = $month . '-01'; // Convert to full date
         
         if ($amount <= 0) {
             $error = 'Please enter a valid amount';
@@ -33,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Check if goal exists
             $check_query = "SELECT id FROM budget_goals WHERE user_id = ? AND category_id = ? AND month = ?";
             $stmt = $conn->prepare($check_query);
-            $stmt->bind_param("iis", $user_id, $category_id, $month);
+            $stmt->bind_param("iis", $user_id, $category_id, $month_date);
             $stmt->execute();
             $result = $stmt->get_result();
             
@@ -41,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Update existing goal
                 $update_query = "UPDATE budget_goals SET amount = ? WHERE user_id = ? AND category_id = ? AND month = ?";
                 $stmt = $conn->prepare($update_query);
-                $stmt->bind_param("diis", $amount, $user_id, $category_id, $month);
+                $stmt->bind_param("diis", $amount, $user_id, $category_id, $month_date);
                 if ($stmt->execute()) {
                     $success = 'Budget goal updated successfully!';
                 } else {
@@ -51,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Insert new goal
                 $insert_query = "INSERT INTO budget_goals (user_id, category_id, amount, month) VALUES (?, ?, ?, ?)";
                 $stmt = $conn->prepare($insert_query);
-                $stmt->bind_param("iids", $user_id, $category_id, $amount, $month);
+                $stmt->bind_param("iids", $user_id, $category_id, $amount, $month_date);
                 if ($stmt->execute()) {
                     $success = 'Budget goal created successfully!';
                 } else {
@@ -61,13 +72,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
-
-// Get expense categories
-$categories_query = "SELECT * FROM categories WHERE user_id = ? AND type = 'expense' ORDER BY name";
-$stmt = $conn->prepare($categories_query);
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$categories = $stmt->get_result();
 
 // Get existing goals for current month
 $goals_query = "SELECT bg.*, c.name as category_name, c.icon,
@@ -83,7 +87,7 @@ $goals_query = "SELECT bg.*, c.name as category_name, c.icon,
                 GROUP BY bg.id
                 ORDER BY c.name";
 $stmt = $conn->prepare($goals_query);
-$stmt->bind_param("is", $user_id, $current_month);
+$stmt->bind_param("is", $user_id, $current_month_date);
 $stmt->execute();
 $goals = $stmt->get_result();
 
@@ -110,13 +114,17 @@ include 'includes/header.php';
                     <select id="category_id" name="category_id" required>
                         <option value="">Select a category</option>
                         <?php 
-                        $categories->data_seek(0);
-                        while($cat = $categories->fetch_assoc()): 
+                        if ($categories && $categories->num_rows > 0) {
+                            $categories->data_seek(0);
+                            while($cat = $categories->fetch_assoc()): 
                         ?>
                             <option value="<?php echo $cat['id']; ?>">
                                 <?php echo $cat['icon'] . ' ' . htmlspecialchars($cat['name']); ?>
                             </option>
-                        <?php endwhile; ?>
+                        <?php 
+                            endwhile;
+                        } 
+                        ?>
                     </select>
                 </div>
                 
@@ -136,7 +144,7 @@ include 'includes/header.php';
         
         <div class="card">
             <h2>Current Goals (<?php echo date('F Y', strtotime($current_month . '-01')); ?>)</h2>
-            <?php if ($goals->num_rows > 0): ?>
+            <?php if ($goals && $goals->num_rows > 0): ?>
                 <div class="goals-list">
                     <?php while($goal = $goals->fetch_assoc()): 
                         $percentage = ($goal['spent'] / $goal['amount']) * 100;
