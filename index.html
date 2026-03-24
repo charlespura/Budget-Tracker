@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Tracker - Demo Preview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #2196F3;
+            --danger-color: #f44336;
+            --warning-color: #ff9800;
+            --dark-color: #333;
+            --light-color: #f4f4f4;
+            --success-color: #4caf50;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f4f4f4;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo a {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--dark-color);
+            transition: color 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: var(--primary-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: calc(100vh - 140px);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: transform 0.3s, opacity 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-buttons {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        /* Features */
+        .features-section {
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Auth Forms */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 140px);
+            padding: 2rem;
+        }
+
+        .auth-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .auth-card h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--primary-color);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+
+        .auth-link {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .auth-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        /* Dashboard */
+        .dashboard h1 {
+            margin-bottom: 2rem;
+            color: var(--primary-color);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+        }
+
+        .stat-info h3 {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-amount {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .stat-amount.positive {
+            color: var(--success-color);
+        }
+
+        .stat-amount.negative {
+            color: var(--danger-color);
+        }
+
+        .dashboard-actions {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        /* Transaction List */
+        .transaction-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .transaction-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .transaction-icon {
+            font-size: 1.5rem;
+        }
+
+        .transaction-details {
+            flex: 1;
+        }
+
+        .transaction-category {
+            font-weight: bold;
+        }
+
+        .transaction-date {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .transaction-amount {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .transaction-amount.income {
+            color: var(--success-color);
+        }
+
+        .transaction-amount.expense {
+            color: var(--danger-color);
+        }
+
+        /* Category List */
+        .category-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .category-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            background: var(--light-color);
+            border-radius: 5px;
+        }
+
+        .category-icon {
+            font-size: 1.2rem;
+        }
+
+        .category-name {
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .category-amount {
+            font-weight: bold;
+            color: var(--danger-color);
+        }
+
+        /* Budget Goals */
+        .goals-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .goal-item {
+            background: var(--light-color);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .goal-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .goal-name {
+            flex: 1;
+            font-weight: bold;
+        }
+
+        .goal-amounts {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-fill.success {
+            background: var(--success-color);
+        }
+
+        .progress-fill.warning {
+            background: var(--warning-color);
+        }
+
+        .progress-fill.danger {
+            background: var(--danger-color);
+        }
+
+        .goal-status {
+            font-size: 0.85rem;
+            text-align: right;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark-color);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+
+        /* Demo Notice */
+        .demo-notice {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            color: #856404;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="#">💰 Budget Tracker</a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#login">Login</a></li>
+                <li><a href="#register">Register</a></li>
+                <li><a href="#dashboard">Dashboard</a></li>
+                <li><a href="#reports">Reports</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- Home Section -->
+        <div id="home">
+            <div class="hero-section">
+                <div class="hero-content">
+                    <h1>💰 Budget Tracker</h1>
+                    <p>Track your income and expenses easily</p>
+                    <div class="hero-buttons">
+                        <a href="#login" class="btn btn-primary">Login</a>
+                        <a href="#register" class="btn btn-secondary">Register</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="features-section">
+                <h2>Features</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <h3>Track Expenses</h3>
+                        <p>Log all your expenses and income in one place</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📈</div>
+                        <h3>View Balance</h3>
+                        <p>See your current balance at a glance</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎯</div>
+                        <h3>Set Goals</h3>
+                        <p>Create budget goals and track progress</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📱</div>
+                        <h3>Mobile Ready</h3>
+                        <p>Access from any device with responsive design</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login Section -->
+        <div id="login">
+            <div class="auth-container">
+                <div class="auth-card">
+                    <h2>Login</h2>
+                    <form onsubmit="alert('Demo: This would log you in. Please use the actual PHP files for full functionality.'); return false;">
+                        <div class="form-group">
+                            <label for="username">Username or Email</label>
+                            <input type="text" id="username" name="username" placeholder="Enter username or email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" placeholder="Enter password" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-block">Login</button>
+                    </form>
+                    
+                    <p class="auth-link">
+                        Don't have an account? <a href="#register">Register here</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Register Section -->
+        <div id="register">
+            <div class="auth-container">
+                <div class="auth-card">
+                    <h2>Register</h2>
+                    <form onsubmit="alert('Demo: This would register you. Please use the actual PHP files for full functionality.'); return false;">
+                        <div class="form-group">
+                            <label for="reg-username">Username (min. 3 characters)</label>
+                            <input type="text" id="reg-username" name="username" placeholder="Choose a username" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="reg-password">Password (min. 6 characters)</label>
+                            <input type="password" id="reg-password" name="password" placeholder="Choose a password" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="confirm_password">Confirm Password</label>
+                            <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-block">Register</button>
+                    </form>
+                    
+                    <p class="auth-link">
+                        Already have an account? <a href="#login">Login here</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div id="dashboard">
+            <div class="dashboard">
+                <h1>Welcome, John Doe!</h1>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-info">
+                            <h3>Current Balance</h3>
+                            <p class="stat-amount positive">₱15,750.00</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">📈</div>
+                        <div class="stat-info">
+                            <h3>Total Income</h3>
+                            <p class="stat-amount positive">₱25,000.00</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">📉</div>
+                        <div class="stat-info">
+                            <h3>Total Expenses</h3>
+                            <p class="stat-amount negative">₱9,250.00</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dashboard-actions">
+                    <a href="#" class="btn btn-primary" onclick="alert('Demo: This would open add transaction form. Use add_transaction.php for full functionality.'); return false;">+ Add Transaction</a>
+                    <a href="#reports" class="btn btn-secondary">📊 View Reports</a>
+                    <a href="#" class="btn btn-secondary" onclick="alert('Demo: This would open budget goals page. Use budget_goals.php for full functionality.'); return false;">🎯 Set Goals</a>
+                </div>
+                
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <h2>Recent Transactions</h2>
+                        <div class="transaction-list">
+                            <div class="transaction-item">
+                                <div class="transaction-icon">💰</div>
+                                <div class="transaction-details">
+                                    <div class="transaction-category">Allowance</div>
+                                    <div class="transaction-date">Mar 24, 2026</div>
+                                </div>
+                                <div class="transaction-amount income">+ ₱5,000.00</div>
+                            </div>
+                            
+                            <div class="transaction-item">
+                                <div class="transaction-icon">🍔</div>
+                                <div class="transaction-details">
+                                    <div class="transaction-category">Food</div>
+                                    <div class="transaction-date">Mar 23, 2026</div>
+                                    <div class="transaction-desc">Lunch with friends</div>
+                                </div>
+                                <div class="transaction-amount expense">- ₱350.00</div>
+                            </div>
+                            
+                            <div class="transaction-item">
+                                <div class="transaction-icon">🚗</div>
+                                <div class="transaction-details">
+                                    <div class="transaction-category">Transport</div>
+                                    <div class="transaction-date">Mar 22, 2026</div>
+                                    <div class="transaction-desc">Grab ride</div>
+                                </div>
+                                <div class="transaction-amount expense">- ₱150.00</div>
+                            </div>
+                            
+                            <div class="transaction-item">
+                                <div class="transaction-icon">💼</div>
+                                <div class="transaction-details">
+                                    <div class="transaction-category">Part-time Job</div>
+                                    <div class="transaction-date">Mar 20, 2026</div>
+                                </div>
+                                <div class="transaction-amount income">+ ₱3,500.00</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h2>Top Spending Categories</h2>
+                        <div class="category-list">
+                            <div class="category-item">
+                                <span class="category-icon">🍔</span>
+                                <span class="category-name">Food</span>
+                                <span class="category-amount">₱3,250.00</span>
+                            </div>
+                            <div class="category-item">
+                                <span class="category-icon">🚗</span>
+                                <span class="category-name">Transport</span>
+                                <span class="category-amount">₱1,800.00</span>
+                            </div>
+                            <div class="category-item">
+                                <span class="category-icon">📚</span>
+                                <span class="category-name">School</span>
+                                <span class="category-amount">₱1,500.00</span>
+                            </div>
+                            <div class="category-item">
+                                <span class="category-icon">💡</span>
+                                <span class="category-name">Bills</span>
+                                <span class="category-amount">₱1,200.00</span>
+                            </div>
+                        </div>
+                        
+                        <h2 style="margin-top: 2rem;">Budget Goals Progress</h2>
+                        <div class="goals-list">
+                            <div class="goal-item">
+                                <div class="goal-header">
+                                    <span class="goal-icon">🍔</span>
+                                    <span class="goal-name">Food Budget</span>
+                                </div>
+                                <div class="goal-amounts">
+                                    <span>Budget: ₱5,000.00</span>
+                                    <span>Spent: ₱3,250.00</span>
+                                    <span>Remaining: ₱1,750.00</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill success" style="width: 65%"></div>
+                                </div>
+                                <div class="goal-status success">✓ On track</div>
+                            </div>
+                            
+                            <div class="goal-item">
+                                <div class="goal-header">
+                                    <span class="goal-icon">🚗</span>
+                                    <span class="goal-name">Transport Budget</span>
+                                </div>
+                                <div class="goal-amounts">
+                                    <span>Budget: ₱2,000.00</span>
+                                    <span>Spent: ₱1,800.00</span>
+                                    <span>Remaining: ₱200.00</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill warning" style="width: 90%"></div>
+                                </div>
+                                <div class="goal-status warning">⚠️ Approaching limit</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reports Section -->
+        <div id="reports">
+            <div class="dashboard">
+                <h1>Transaction Reports</h1>
+                
+                <div class="card">
+                    <h2>Filter by Date</h2>
+                    <form onsubmit="alert('Demo: This would filter reports. Use reports.php for full functionality.'); return false;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 1rem; align-items: end;">
+                            <div class="form-group">
+                                <label for="start_date">Start Date</label>
+                                <input type="date" id="start_date" name="start_date" value="2026-03-01">
+                            </div>
+                            <div class="form-group">
+                                <label for="end_date">End Date</label>
+                                <input type="date" id="end_date" name="end_date" value="2026-03-31">
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Apply Filter</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">📈</div>
+                        <div class="stat-info">
+                            <h3>Total Income</h3>
+                            <p class="stat-amount positive">₱8,500.00</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">📉</div>
+                        <div class="stat-info">
+                            <h3>Total Expenses</h3>
+                            <p class="stat-amount negative">₱4,250.00</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-info">
+                            <h3>Net Balance</h3>
+                            <p class="stat-amount positive">₱4,250.00</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <h2>Category Breakdown</h2>
+                        <div class="category-list">
+                            <div class="category-item">
+                                <span class="category-icon">🍔</span>
+                                <span class="category-name">Food</span>
+                                <div class="category-stats">
+                                    <span class="expense-amount">-₱2,150.00</span>
+                                </div>
+                            </div>
+                            <div class="category-item">
+                                <span class="category-icon">🚗</span>
+                                <span class="category-name">Transport</span>
+                                <div class="category-stats">
+                                    <span class="expense-amount">-₱1,200.00</span>
+                                </div>
+                            </div>
+                            <div class="category-item">
+                                <span class="category-icon">📚</span>
+                                <span class="category-name">School</span>
+                                <div class="category-stats">
+                                    <span class="expense-amount">-₱900.00</span>
+                                </div>
+                            </div>
+                            <div class="category-item">
+                                <span class="category-icon">💰</span>
+                                <span class="category-name">Allowance</span>
+                                <div class="category-stats">
+                                    <span class="income-amount">+₱5,000.00</span>
+                                </div>
+                            </div>
+                            <div class="category-item">
+                                <span class="category-icon">💼</span>
+                                <span class="category-name">Part-time Job</span>
+                                <div class="category-stats">
+                                    <span class="income-amount">+₱3,500.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h2>Transaction History</h2>
+                        <div class="transaction-list">
+                            <div class="transaction-item">
+                                <div class="transaction-icon">💰</div>
+                                <div class="transaction-details">
+                                    <div class="transaction-category">Allowance</div>
+                                    <div class="transaction-date">Mar 24, 2026</div>
+                                </div>
+                                <div class="transaction-amount income">+ ₱5,000.00</div>
+                            </div>
+                            <div class="transaction-item">
+                                <div class="transaction-icon">🍔</div>
+                                <div class="transaction-details">
+                                    <div class="transaction-category">Food</div>
+                                    <div class="transaction-date">Mar 23, 2026</div>
+                                    <div class="transaction-desc">Lunch</div>
+                                </div>
+                                <div class="transaction-amount expense">- ₱350.00</div>
+                            </div>
+                            <div class="transaction-item">
+                                <div class="transaction-icon">🚗</div>
+                                <div class="transaction-details">
+                                    <div class="transaction-category">Transport</div>
+                                    <div class="transaction-date">Mar 22, 2026</div>
+                                </div>
+                                <div class="transaction-amount expense">- ₱150.00</div>
+                            </div>
+                            <div class="transaction-item">
+                                <div class="transaction-icon">💼</div>
+                                <div class="transaction-details">
+                                    <div class="transaction-category">Part-time Job</div>
+                                    <div class="transaction-date">Mar 20, 2026</div>
+                                </div>
+                                <div class="transaction-amount income">+ ₱3,500.00</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 Budget Tracker. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <div class="demo-notice">
+        ⚡ DEMO MODE: This is a static preview. For full functionality, use the PHP files: index.php, login.php, register.php, dashboard.php, etc.
+    </div>
+
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
