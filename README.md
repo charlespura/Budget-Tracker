@@ -1,6 +1,11 @@
 # 💰 Budget Tracker
 
 A simple yet powerful personal finance management application to track income, expenses, and budget goals.
+<img width="800" height="500" alt="Screenshot 2026-03-24 at 2 09 16 PM" src="https://github.com/user-attachments/assets/b1c1cc9b-54b7-4c10-afe6-81496291bc97" />
+<img width="800" height="500" alt="Screenshot 2026-03-24 at 2 09 42 PM" src="https://github.com/user-attachments/assets/2ad9907a-ed91-45a3-af11-22b693104825" />
+
+
+
 
 ## Features
 
